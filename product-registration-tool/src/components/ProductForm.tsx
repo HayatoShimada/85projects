@@ -41,7 +41,7 @@ const productSchema = z.object({
 type ProductFormData = z.infer<typeof productSchema>
 
 interface ProductFormProps {
-  onSuccess: (productId: string, sku: string, title?: string) => void
+  onSuccess: (productId: string, sku: string, title?: string, price?: string) => void
 }
 
 export default function ProductForm({ onSuccess }: ProductFormProps) {
@@ -93,7 +93,7 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
       }
 
       const result = await response.json()
-      onSuccess(result.productId, result.sku, data.title)
+      onSuccess(result.productId, result.sku, data.title, data.price)
       reset()
       setImages([])
       setSku(generateUniqueSKU(isVintage))

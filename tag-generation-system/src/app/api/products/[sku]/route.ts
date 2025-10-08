@@ -13,10 +13,12 @@ export async function GET(
 
     if (useMock) {
       // Mockデータ返却
+      // Note: Mock環境では商品データはlocalStorageから取得される想定
+      // ここでは基本情報のみ返す
       return NextResponse.json({
         id: `mock-product-${sku}`,
         title: `商品 ${sku}`,
-        price: '8900',
+        price: '0', // クライアント側でlocalStorageから上書きされる
         sku: sku,
         images: [],
       })

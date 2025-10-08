@@ -31,7 +31,25 @@ export default function TagGenerator({ sku }: TagGeneratorProps) {
         throw new Error('商品が見つかりません')
       }
 
-      const productData = await response.json()
+      let productData = await response.json()
+
+      // Mock環境対応: localStorageから商品データを取得して上書き
+      if (typeof window !== 'undefined') {
+        const storedData = localStorage.getItem(`mock-product-${sku}`)
+        if (storedData) {
+          try {
+            const mockData = JSON.parse(storedData)
+            productData = {
+              ...productData,
+              title: mockData.title || productData.title,
+              price: mockData.price || productData.price,
+            }
+            console.log('[Mock] Loaded product data from localStorage:', mockData)
+          } catch (e) {
+            console.warn('[Mock] Failed to parse localStorage data:', e)
+          }
+        }
+      }
 
       // タグデザイン生成
       const design = await generateTagDesign({
