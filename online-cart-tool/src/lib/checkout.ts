@@ -63,12 +63,12 @@ export async function generateCheckoutQRCode(
 /**
  * F301-F303統合: POSカートからチェックアウトQRまで一気通貫
  */
-export async function createQuickCheckout(): Promise<CheckoutData> {
-  // F301: POSカート取得
-  const cartItems = await fetchPOSCart()
+export async function createQuickCheckout(cartItems?: CartItem[]): Promise<CheckoutData> {
+  // F301: POSカート取得（手動入力の場合はスキップ）
+  const items = cartItems || await fetchPOSCart()
 
   // F302: Checkout URL生成
-  const checkoutUrl = await createCheckoutURL(cartItems)
+  const checkoutUrl = await createCheckoutURL(items)
 
   // F303: QRコード生成
   const qrCode = await generateCheckoutQRCode(checkoutUrl)
@@ -77,7 +77,7 @@ export async function createQuickCheckout(): Promise<CheckoutData> {
   const sessionId = `session-${Date.now()}`
 
   return {
-    items: cartItems,
+    items,
     checkoutUrl,
     qrCode,
     sessionId,
