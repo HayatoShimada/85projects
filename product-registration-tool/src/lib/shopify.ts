@@ -119,6 +119,300 @@ export async function createShopifyProduct(data: ProductData) {
 }
 
 /**
+ * F107: 商品一覧取得
+ */
+export async function getProducts() {
+  const apiEndpoint = process.env.SHOPIFY_API_ENDPOINT || 'http://shopify-mock:4000'
+  const useMock = apiEndpoint.includes('shopify-mock')
+
+  if (useMock) {
+    // Mock実装
+    console.log('Using Mock Shopify API - Getting products list')
+
+    // Mockデータ（実際にはDBやファイルから取得）
+    return {
+      products: [
+        {
+          id: 'mock-1',
+          title: 'ヴィンテージデニムジャケット',
+          price: '8900',
+          sku: 'VTG-lm3k4p-AB12C',
+          condition: 'A',
+          category: 'アウター',
+          isVintage: true,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'mock-2',
+          title: '新品Tシャツ',
+          price: '3500',
+          sku: 'NEW-lm3k5q-CD34E',
+          category: 'トップス',
+          isVintage: false,
+          stock: 10,
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    }
+  }
+
+  // 実際のShopify Admin API実装
+  try {
+    const shopifyUrl = process.env.SHOPIFY_STORE_URL
+    const accessToken = process.env.SHOPIFY_ACCESS_TOKEN
+
+    if (!shopifyUrl || !accessToken) {
+      throw new Error('Shopify credentials not configured')
+    }
+
+    const response = await fetch(`${shopifyUrl}/admin/api/2024-01/products.json`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': accessToken,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Shopify API error: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    // 商品データを整形
+    const products = result.products.map((product: any) => ({
+      id: product.id.toString(),
+      title: product.title,
+      price: product.variants[0]?.price || '0',
+      sku: product.variants[0]?.sku || '',
+      category: product.product_type,
+      isVintage: product.tags.includes('vintage'),
+      condition: product.metafields?.find((m: any) => m.key === 'condition')?.value,
+      stock: product.variants[0]?.inventory_quantity || 0,
+      createdAt: product.created_at,
+    }))
+
+    return { products }
+  } catch (error) {
+    console.error('Shopify API error:', error)
+    throw error
+  }
+}
+
+/**
+ * F108: 商品情報取得（編集用）
+ */
+export async function getProduct(productId: string) {
+  const apiEndpoint = process.env.SHOPIFY_API_ENDPOINT || 'http://shopify-mock:4000'
+  const useMock = apiEndpoint.includes('shopify-mock')
+
+  if (useMock) {
+    // Mock実装
+    console.log('Using Mock Shopify API - Getting product:', productId)
+
+    return {
+      id: productId,
+      title: 'ヴィンテージデニムジャケット',
+      price: '8900',
+      sku: 'VTG-lm3k4p-AB12C',
+      condition: 'A',
+      category: 'アウター',
+      description: 'レア物のヴィンテージデニムジャケット',
+      isVintage: true,
+      measurements: {
+        shoulder: '45',
+        chest: '50',
+        sleeve: '60',
+        length: '65',
+      },
+      material: 'コットン100%',
+      origin: 'USA',
+    }
+  }
+
+  // 実際のShopify Admin API実装
+  try {
+    const shopifyUrl = process.env.SHOPIFY_STORE_URL
+    const accessToken = process.env.SHOPIFY_ACCESS_TOKEN
+
+    if (!shopifyUrl || !accessToken) {
+      throw new Error('Shopify credentials not configured')
+    }
+
+    const response = await fetch(`${shopifyUrl}/admin/api/2024-01/products/${productId}.json`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': accessToken,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Shopify API error: ${response.status}`)
+    }
+
+    const result = await response.json()
+    const product = result.product
+
+    return {
+      id: product.id.toString(),
+      title: product.title,
+      price: product.variants[0]?.price || '0',
+      sku: product.variants[0]?.sku || '',
+      category: product.product_type,
+      description: product.body_html,
+      isVintage: product.tags.includes('vintage'),
+      condition: product.metafields?.find((m: any) => m.key === 'condition')?.value,
+      measurements: JSON.parse(product.metafields?.find((m: any) => m.key === 'measurements')?.value || '{}'),
+      material: product.metafields?.find((m: any) => m.key === 'material')?.value,
+      origin: product.metafields?.find((m: any) => m.key === 'origin')?.value,
+    }
+  } catch (error) {
+    console.error('Shopify API error:', error)
+    throw error
+  }
+}
+
+/**
+ * F108: 商品更新
+ */
+export async function updateShopifyProduct(productId: string, data: Partial<ProductData>) {
+  const apiEndpoint = process.env.SHOPIFY_API_ENDPOINT || 'http://shopify-mock:4000'
+  const useMock = apiEndpoint.includes('shopify-mock')
+
+  if (useMock) {
+    // Mock実装
+    console.log('Using Mock Shopify API - Updating product:', productId)
+    console.log('Update data:', data)
+
+    return {
+      success: true,
+      productId,
+    }
+  }
+
+  // 実際のShopify Admin API実装
+  try {
+    const shopifyUrl = process.env.SHOPIFY_STORE_URL
+    const accessToken = process.env.SHOPIFY_ACCESS_TOKEN
+
+    if (!shopifyUrl || !accessToken) {
+      throw new Error('Shopify credentials not configured')
+    }
+
+    const product: any = {
+      title: data.title,
+      body_html: data.description || '',
+      product_type: data.category || '',
+    }
+
+    if (data.price) {
+      // バリアント価格更新は別API
+      const variantResponse = await fetch(`${shopifyUrl}/admin/api/2024-01/products/${productId}.json`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': accessToken,
+        },
+      })
+
+      const variantResult = await variantResponse.json()
+      const variantId = variantResult.product.variants[0].id
+
+      await fetch(`${shopifyUrl}/admin/api/2024-01/variants/${variantId}.json`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': accessToken,
+        },
+        body: JSON.stringify({
+          variant: {
+            price: data.price,
+          },
+        }),
+      })
+    }
+
+    const response = await fetch(`${shopifyUrl}/admin/api/2024-01/products/${productId}.json`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': accessToken,
+      },
+      body: JSON.stringify({ product }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Shopify API error: ${response.status}`)
+    }
+
+    // メタフィールド更新
+    if (data.measurements || data.material || data.origin || data.condition) {
+      await setProductMetafields(productId, {
+        condition: data.condition,
+        measurements: data.measurements ? JSON.stringify(data.measurements) : undefined,
+        material: data.material,
+        origin: data.origin,
+      })
+    }
+
+    return {
+      success: true,
+      productId,
+    }
+  } catch (error) {
+    console.error('Shopify API error:', error)
+    throw error
+  }
+}
+
+/**
+ * F109: 商品削除
+ */
+export async function deleteShopifyProduct(productId: string) {
+  const apiEndpoint = process.env.SHOPIFY_API_ENDPOINT || 'http://shopify-mock:4000'
+  const useMock = apiEndpoint.includes('shopify-mock')
+
+  if (useMock) {
+    // Mock実装
+    console.log('Using Mock Shopify API - Deleting product:', productId)
+
+    return {
+      success: true,
+    }
+  }
+
+  // 実際のShopify Admin API実装
+  try {
+    const shopifyUrl = process.env.SHOPIFY_STORE_URL
+    const accessToken = process.env.SHOPIFY_ACCESS_TOKEN
+
+    if (!shopifyUrl || !accessToken) {
+      throw new Error('Shopify credentials not configured')
+    }
+
+    const response = await fetch(`${shopifyUrl}/admin/api/2024-01/products/${productId}.json`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': accessToken,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Shopify API error: ${response.status}`)
+    }
+
+    return {
+      success: true,
+    }
+  } catch (error) {
+    console.error('Shopify API error:', error)
+    throw error
+  }
+}
+
+/**
  * メタフィールド設定（採寸データなど）
  */
 async function setProductMetafields(
