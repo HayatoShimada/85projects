@@ -41,7 +41,7 @@ const productSchema = z.object({
 type ProductFormData = z.infer<typeof productSchema>
 
 interface ProductFormProps {
-  onSuccess: (productId: string, sku: string) => void
+  onSuccess: (productId: string, sku: string, title?: string) => void
 }
 
 export default function ProductForm({ onSuccess }: ProductFormProps) {
