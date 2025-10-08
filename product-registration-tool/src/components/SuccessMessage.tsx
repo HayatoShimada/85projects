@@ -7,16 +7,20 @@ interface SuccessMessageProps {
   sku: string
   title: string
   price?: string
+  condition?: string
   onContinue: () => void
 }
 
-export default function SuccessMessage({ productId, sku, title, price, onContinue }: SuccessMessageProps) {
+export default function SuccessMessage({ productId, sku, title, price, condition, onContinue }: SuccessMessageProps) {
   // URLパラメータで商品情報を渡す（Mock環境対応）
   const params = new URLSearchParams({
     sku,
     title: title || '',
     price: price || '0',
   })
+  if (condition) {
+    params.set('condition', condition)
+  }
   const tagSystemUrl = `http://localhost:3001?${params.toString()}`
 
   return (

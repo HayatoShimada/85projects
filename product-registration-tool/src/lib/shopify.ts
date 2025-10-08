@@ -9,6 +9,7 @@ export interface ProductData {
   price: string
   category?: string
   description?: string
+  condition?: string // 状態ランク (S/A/B/C/D) - 古着専用
   measurements?: Record<string, string> // 採寸データ（古着用）
   material?: string
   origin?: string
@@ -100,6 +101,7 @@ export async function createShopifyProduct(data: ProductData) {
     if (data.isVintage && data.measurements) {
       const productId = result.product.id
       await setProductMetafields(productId, {
+        condition: data.condition,
         measurements: JSON.stringify(data.measurements),
         material: data.material,
         origin: data.origin,

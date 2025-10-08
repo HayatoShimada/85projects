@@ -31,14 +31,23 @@ export default function PrintPreview({ tagData, onClose }: PrintPreviewProps) {
               {/* タグコンテンツ */}
               <div className="h-full flex flex-col p-2">
                 {/* 商品名 */}
-                <div className="text-center mb-2">
+                <div className="text-center mb-1">
                   <h3 className="font-bold text-sm">{tagData.productName}</h3>
                 </div>
 
                 {/* 価格 */}
-                <div className="text-center mb-3">
+                <div className="text-center mb-2">
                   <p className="text-3xl font-bold text-red-600">¥{tagData.price}</p>
                 </div>
+
+                {/* 状態ランク（古着の場合） */}
+                {tagData.condition && (
+                  <div className="text-center mb-2">
+                    <span className="inline-block bg-amber-100 border-2 border-amber-500 px-3 py-1 rounded font-bold text-lg">
+                      状態: {tagData.condition}
+                    </span>
+                  </div>
+                )}
 
                 {/* QRコード2つ */}
                 <div className="flex-1 flex space-x-1">

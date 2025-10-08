@@ -16,6 +16,7 @@ const productSchema = z.object({
   isVintage: z.boolean(),
 
   // 古着専用フィールド
+  condition: z.string().optional(), // 状態ランク (S/A/B/C/D)
   shoulder: z.string().optional(),
   chest: z.string().optional(),
   sleeve: z.string().optional(),
@@ -41,7 +42,7 @@ const productSchema = z.object({
 type ProductFormData = z.infer<typeof productSchema>
 
 interface ProductFormProps {
-  onSuccess: (productId: string, sku: string, title?: string, price?: string) => void
+  onSuccess: (productId: string, sku: string, title?: string, price?: string, condition?: string) => void
 }
 
 export default function ProductForm({ onSuccess }: ProductFormProps) {
@@ -79,6 +80,7 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
           ...data,
           sku,
           images,
+          condition: data.condition,
           measurements: isVintage ? {
             shoulder: data.shoulder,
             chest: data.chest,
@@ -93,7 +95,7 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
       }
 
       const result = await response.json()
-      onSuccess(result.productId, result.sku, data.title, data.price)
+      onSuccess(result.productId, result.sku, data.title, data.price, data.condition)
       reset()
       setImages([])
       setSku(generateUniqueSKU(isVintage))
@@ -183,7 +185,30 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
       {/* 古着専用フィールド */}
       {isVintage && (
         <div className="space-y-4 bg-amber-50 p-4 rounded-lg">
-          <h2 className="text-xl font-semibold">古着専用 - 採寸データ</h2>
+          <h2 className="text-xl font-semibold">古着専用情報</h2>
+
+          {/* 状態ランク */}
+          <div>
+            <label className="block font-medium mb-1">
+              状態ランク <span className="text-red-500">*</span>
+            </label>
+            <select {...register('condition')} className="w-full border rounded px-3 py-2">
+              <option value="">選択してください</option>
+              <option value="S">S - 新品同様（タグ付き、未使用）</option>
+              <option value="A">A - 美品（使用感がほぼなく、目立つダメージなし）</option>
+              <option value="B">B - 良好（多少の使用感あり、大きなダメージなし）</option>
+              <option value="C">C - 使用感あり（目立つ使用感、小さなダメージあり）</option>
+              <option value="D">D - ダメージあり（大きなダメージ、汚れ、破れ等）</option>
+            </select>
+            {errors.condition && (
+              <p className="text-red-500 text-sm mt-1">{errors.condition.message}</p>
+            )}
+            <p className="text-sm text-gray-600 mt-1">
+              💡 状態ランクはタグに表示されます
+            </p>
+          </div>
+
+          <h3 className="text-lg font-semibold mt-4">採寸データ</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div>

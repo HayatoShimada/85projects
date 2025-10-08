@@ -10,10 +10,11 @@ export default function Home() {
     sku: string
     title: string
     price?: string
+    condition?: string
   } | null>(null)
 
-  const handleSuccess = (productId: string, sku: string, title = '商品', price?: string) => {
-    setSuccess({ productId, sku, title, price })
+  const handleSuccess = (productId: string, sku: string, title = '商品', price?: string, condition?: string) => {
+    setSuccess({ productId, sku, title, price, condition })
   }
 
   const handleContinue = () => {
@@ -33,6 +34,7 @@ export default function Home() {
           sku={success.sku}
           title={success.title}
           price={success.price}
+          condition={success.condition}
           onContinue={handleContinue}
         />
       ) : (

@@ -9,9 +9,10 @@ interface TagGeneratorProps {
   sku: string
   title?: string | null
   price?: string | null
+  condition?: string | null
 }
 
-export default function TagGenerator({ sku, title: urlTitle, price: urlPrice }: TagGeneratorProps) {
+export default function TagGenerator({ sku, title: urlTitle, price: urlPrice, condition: urlCondition }: TagGeneratorProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [tagData, setTagData] = useState<TagDesign | null>(null)
@@ -36,13 +37,14 @@ export default function TagGenerator({ sku, title: urlTitle, price: urlPrice }: 
       let productData = await response.json()
 
       // Mock環境対応: URLパラメータから商品データを取得して上書き
-      if (urlTitle || urlPrice) {
+      if (urlTitle || urlPrice || urlCondition) {
         productData = {
           ...productData,
           title: urlTitle || productData.title,
           price: urlPrice || productData.price,
+          condition: urlCondition || productData.condition,
         }
-        console.log('[Mock] Using product data from URL parameters:', { title: urlTitle, price: urlPrice })
+        console.log('[Mock] Using product data from URL parameters:', { title: urlTitle, price: urlPrice, condition: urlCondition })
       }
 
       // タグデザイン生成
@@ -51,6 +53,7 @@ export default function TagGenerator({ sku, title: urlTitle, price: urlPrice }: 
         price: productData.price,
         sku: productData.sku,
         productId: productData.id,
+        condition: productData.condition,
       })
 
       setTagData(design)

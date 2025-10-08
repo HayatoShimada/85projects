@@ -9,6 +9,7 @@ function TagContent() {
   const sku = searchParams.get('sku')
   const title = searchParams.get('title')
   const price = searchParams.get('price')
+  const condition = searchParams.get('condition')
 
   if (!sku) {
     return (
@@ -26,7 +27,7 @@ function TagContent() {
     )
   }
 
-  return <TagGenerator sku={sku} title={title} price={price} />
+  return <TagGenerator sku={sku} title={title} price={price} condition={condition} />
 }
 
 export default function Home() {

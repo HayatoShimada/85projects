@@ -48,6 +48,7 @@ export interface TagDesign {
   productName: string
   price: string
   sku: string
+  condition?: string // 状態ランク (S/A/B/C/D) - 古着専用
   posQRCode: string
   customerQRCode: string
 }
@@ -58,6 +59,7 @@ export async function generateTagDesign(
     price: string
     sku: string
     productId: string
+    condition?: string
   }
 ): Promise<TagDesign> {
   const storeDomain = process.env.NEXT_PUBLIC_STORE_DOMAIN || ''
@@ -73,6 +75,7 @@ export async function generateTagDesign(
     productName: productData.name,
     price: productData.price,
     sku: productData.sku,
+    condition: productData.condition,
     posQRCode: posQR,
     customerQRCode: customerQR,
   }
