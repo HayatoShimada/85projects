@@ -7,6 +7,8 @@ import TagGenerator from '@/components/TagGenerator'
 function TagContent() {
   const searchParams = useSearchParams()
   const sku = searchParams.get('sku')
+  const title = searchParams.get('title')
+  const price = searchParams.get('price')
 
   if (!sku) {
     return (
@@ -24,7 +26,7 @@ function TagContent() {
     )
   }
 
-  return <TagGenerator sku={sku} />
+  return <TagGenerator sku={sku} title={title} price={price} />
 }
 
 export default function Home() {

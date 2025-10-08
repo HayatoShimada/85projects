@@ -11,21 +11,13 @@ interface SuccessMessageProps {
 }
 
 export default function SuccessMessage({ productId, sku, title, price, onContinue }: SuccessMessageProps) {
-  const tagSystemUrl = `http://localhost:3001?sku=${encodeURIComponent(sku)}`
-
-  // Mock環境対応: localStorageに商品データを保存
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const productData = {
-        id: productId,
-        sku,
-        title,
-        price: price || '0',
-        createdAt: new Date().toISOString(),
-      }
-      localStorage.setItem(`mock-product-${sku}`, JSON.stringify(productData))
-    }
-  }, [productId, sku, title, price])
+  // URLパラメータで商品情報を渡す（Mock環境対応）
+  const params = new URLSearchParams({
+    sku,
+    title: title || '',
+    price: price || '0',
+  })
+  const tagSystemUrl = `http://localhost:3001?${params.toString()}`
 
   return (
     <div className="max-w-2xl mx-auto">

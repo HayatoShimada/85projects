@@ -7,9 +7,11 @@ import PrintPreview from './PrintPreview'
 
 interface TagGeneratorProps {
   sku: string
+  title?: string | null
+  price?: string | null
 }
 
-export default function TagGenerator({ sku }: TagGeneratorProps) {
+export default function TagGenerator({ sku, title: urlTitle, price: urlPrice }: TagGeneratorProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [tagData, setTagData] = useState<TagDesign | null>(null)
@@ -33,22 +35,14 @@ export default function TagGenerator({ sku }: TagGeneratorProps) {
 
       let productData = await response.json()
 
-      // Mock環境対応: localStorageから商品データを取得して上書き
-      if (typeof window !== 'undefined') {
-        const storedData = localStorage.getItem(`mock-product-${sku}`)
-        if (storedData) {
-          try {
-            const mockData = JSON.parse(storedData)
-            productData = {
-              ...productData,
-              title: mockData.title || productData.title,
-              price: mockData.price || productData.price,
-            }
-            console.log('[Mock] Loaded product data from localStorage:', mockData)
-          } catch (e) {
-            console.warn('[Mock] Failed to parse localStorage data:', e)
-          }
+      // Mock環境対応: URLパラメータから商品データを取得して上書き
+      if (urlTitle || urlPrice) {
+        productData = {
+          ...productData,
+          title: urlTitle || productData.title,
+          price: urlPrice || productData.price,
         }
+        console.log('[Mock] Using product data from URL parameters:', { title: urlTitle, price: urlPrice })
       }
 
       // タグデザイン生成
