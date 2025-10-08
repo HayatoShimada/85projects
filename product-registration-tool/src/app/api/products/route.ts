@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createShopifyProduct, ProductData } from '@/lib/shopify'
+import { createShopifyProduct, getProducts, ProductData } from '@/lib/shopify'
+
+export async function GET(request: NextRequest) {
+  try {
+    const result = await getProducts()
+    return NextResponse.json(result)
+  } catch (error) {
+    console.error('Products fetch error:', error)
+    return NextResponse.json(
+      { error: '商品一覧の取得に失敗しました' },
+      { status: 500 }
+    )
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {

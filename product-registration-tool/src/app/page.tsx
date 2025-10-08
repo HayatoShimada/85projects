@@ -24,8 +24,18 @@ export default function Home() {
   return (
     <main className="container mx-auto p-8">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">商品登録ツール</h1>
-        <p className="text-gray-600">Shopify商品登録システム (F101-F106)</p>
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">商品登録ツール</h1>
+            <p className="text-gray-600">Shopify商品登録システム (F101-F106)</p>
+          </div>
+          <a
+            href="/products"
+            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700"
+          >
+            📋 商品一覧
+          </a>
+        </div>
       </header>
 
       {success ? (
