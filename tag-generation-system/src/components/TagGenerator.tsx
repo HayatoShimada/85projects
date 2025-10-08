@@ -128,13 +128,13 @@ export default function TagGenerator({ sku, title: urlTitle, price: urlPrice, co
           onClick={() => setShowPreview(true)}
           className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700"
         >
-          📋 印刷プレビュー
+          📋 印刷プレビュー（PDF保存推奨）
         </button>
         <button
           onClick={() => window.print()}
           className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
         >
-          🖨️ 印刷
+          🖨️ 印刷 / PDF保存
         </button>
       </div>
 

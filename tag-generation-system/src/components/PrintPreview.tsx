@@ -77,13 +77,27 @@ export default function PrintPreview({ tagData, onClose }: PrintPreviewProps) {
             </div>
           </div>
 
+          {/* PDF保存の案内 */}
+          <div className="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4">
+            <p className="font-semibold text-blue-800 mb-2">💡 PDF保存の方法</p>
+            <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+              <li>「印刷」ボタンをクリック</li>
+              <li>印刷ダイアログで「送信先」または「プリンター」を「PDFに保存」に変更</li>
+              <li>「保存」または「印刷」ボタンをクリック</li>
+              <li>保存先を選択してPDFファイルを保存</li>
+            </ol>
+            <p className="text-xs text-blue-600 mt-2">
+              ※ ラベルプリンターをお持ちの場合は、通常通り印刷先を選択してください
+            </p>
+          </div>
+
           {/* アクションボタン */}
           <div className="mt-6 flex space-x-4">
             <button
               onClick={() => window.print()}
               className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
             >
-              🖨️ 印刷
+              🖨️ 印刷 / PDF保存
             </button>
             <button
               onClick={onClose}
