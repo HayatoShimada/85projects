@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1001",
+    "title": "ヴィンテージデニムジャケット",
+    "description": "1980年代のヴィンテージデニムジャケット。色落ちが美しく、状態も良好です。",
+    "price": "8900",
+    "sku": "VTG-1001-ABC",
+    "isVintage": true,
+    "category": "アウター",
+    "measurements": {
+      "shoulder": "45cm",
+      "chest": "55cm",
+      "sleeve": "60cm",
+      "length": "65cm"
+    },
+    "material": "コットン100%",
+    "origin": "USA",
+    "images": [
+      "https://via.placeholder.com/800x1000?text=Vintage+Denim+Jacket"
+    ]
+  },
+  {
+    "id": "1002",
+    "title": "ベーシックTシャツ（ホワイト）",
+    "description": "定番のベーシックTシャツ。どんなスタイルにも合わせやすい一枚。",
+    "price": "2900",
+    "sku": "NEW-TS-WHT-M",
+    "isVintage": false,
+    "category": "トップス",
+    "material": "コットン100%",
+    "origin": "日本",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["ホワイト", "ブラック", "グレー"],
+    "stock": 10,
+    "images": [
+      "https://via.placeholder.com/800x1000?text=Basic+T-Shirt"
+    ]
+  },
+  {
+    "id": "1003",
+    "title": "ヴィンテージレザーバッグ",
+    "description": "味わい深い経年変化を楽しめるレザーバッグ。",
+    "price": "12500",
+    "sku": "VTG-1003-XYZ",
+    "isVintage": true,
+    "category": "バッグ",
+    "measurements": {
+      "width": "30cm",
+      "height": "25cm",
+      "depth": "10cm"
+    },
+    "material": "本革",
+    "origin": "イタリア",
+    "images": [
+      "https://via.placeholder.com/800x1000?text=Vintage+Leather+Bag"
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'オンラインカート生成ツール',
+  description: '高速オンラインカート生成システム（カード決済代替）',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  )
+}

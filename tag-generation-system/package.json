@@ -1,0 +1,28 @@
+{
+  "name": "tag-generation-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "自動タグ生成・印刷システム (F201-F205)",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@shopify/shopify-api": "^10.0.0",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/qrcode": "^1.5.5",
+    "typescript": "^5",
+    "eslint": "^8",
+    "eslint-config-next": "^14.2.0"
+  }
+}
